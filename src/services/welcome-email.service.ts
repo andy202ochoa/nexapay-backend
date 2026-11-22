@@ -7,15 +7,27 @@ import {
 /**
  * Servicio de correos de bienvenida de NEXAPAY.
  *
- * Envía correos directamente desde Railway
+ * Envía correos directamente desde el backend
  * utilizando Amazon Simple Email Service (SES).
  *
- * Las credenciales de AWS se obtienen automáticamente
- * de las variables de entorno.
+ * Credenciales: SES_ACCESS_KEY_ID / SES_SECRET_ACCESS_KEY / SES_REGION.
+ * (Vercel reserva los nombres AWS_*, por eso se usan nombres propios.)
+ * Si no están, el SDK busca las variables AWS_* habituales.
  */
 
+const sesAccessKeyId = process.env.SES_ACCESS_KEY_ID;
+const sesSecretAccessKey = process.env.SES_SECRET_ACCESS_KEY;
+
 const ses = new SESClient({
-    region: process.env.AWS_REGION || "us-east-1",
+    region: process.env.SES_REGION || process.env.AWS_REGION || "us-east-1",
+    ...(sesAccessKeyId && sesSecretAccessKey
+        ? {
+              credentials: {
+                  accessKeyId: sesAccessKeyId,
+                  secretAccessKey: sesSecretAccessKey,
+              },
+          }
+        : {}),
 });
 
 /**

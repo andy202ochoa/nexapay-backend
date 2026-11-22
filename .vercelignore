@@ -1,0 +1,4 @@
+# Vercel detecta Express automáticamente a partir de src/app.ts.
+# La función antigua de correo (api/send-welcome.ts) no se despliega:
+# el backend ya envía el correo de bienvenida directamente con AWS SES.
+api/

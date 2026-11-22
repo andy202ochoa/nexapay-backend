@@ -9,6 +9,10 @@ import { Pool } from "pg";
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
+    // En Vercel cada instancia de la función abre su propio pool:
+    // se limita a pocas conexiones para no agotar las de la base de datos
+    // (en Neon conviene usar la cadena de conexión "pooled").
+    max: process.env.VERCEL ? 3 : 10,
 });
 
 export default pool;
